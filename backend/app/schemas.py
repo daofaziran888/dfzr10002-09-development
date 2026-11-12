@@ -28,6 +28,21 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class ProfileBatchPayload(BaseModel):
+    """数据集质量画像整组提交：可携带操作员与乐观版本号处理并发。"""
+
+    dataset_codes: list[str] = Field(default_factory=list)
+    operator: str | None = None
+    # 提交方记录的各数据集当前版本；与服务端不一致时该条记为冲突，不覆盖有效结论。
+    expected_versions: dict[str, int] = Field(default_factory=dict)
+
+
+class EnableBatchPayload(BaseModel):
+    """整组启用：仅当全部数据集当前画像合格时才整体放行。"""
+
+    dataset_codes: list[str] = Field(default_factory=list)
+
+
 
 class IndicatorEntry(BaseModel):
     """业务指标明细结构。"""

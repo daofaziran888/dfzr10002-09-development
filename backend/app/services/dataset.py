@@ -55,7 +55,19 @@ class DatasetService:
         target = ACTION_RULES[action]
         if target not in STATUS_ORDER:
             return None, f"目标状态「{target}」不在允许的状态序列里"
+        # 启用资格只对当前画像版本有效：没有合格画像或画像未通过时一律拦截。
+        if action == "启用配置":
+            from app.services.quality import quality_service
+
+            blocked = quality_service.ensure_enable_allowed(entry)
+            if blocked:
+                return None, blocked
         entry["status"] = target
         entry["pending"] = target != STATUS_ORDER[-1]
         entry["abnormal"] = action in NEGATIVE_ACTIONS
+        if action == "启用配置":
+            entry["是否启用"] = "是"
+            entry.pop("停用原因", None)
+        elif action == "停用配置":
+            entry["是否启用"] = "否"
         return entry, f"数据集已{action}"

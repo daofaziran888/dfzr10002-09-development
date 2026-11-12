@@ -58,6 +58,15 @@ def run_action(entry_id: int, payload: EntryPayload) -> ActionResult:
     return ActionResult(ok=True, message=message, entry=entry)
 
 
+@router.post("/{entry_id}/sync-dependency", response_model=ActionResult)
+def sync_dependency(entry_id: int) -> ActionResult:
+    """同步图表实际引用的数据集画像版本，启用资格随当前画像结论重算。"""
+    entry, message = service.sync_dependency(entry_id)
+    if entry is None:
+        return ActionResult(ok=False, message=message)
+    return ActionResult(ok=True, message=message, entry=entry)
+
+
 @router.get("/export")
 def export_entries() -> dict[str, Any]:
     """导出可视化图表配置清单：返回当前过滤条件下的全量数据。"""

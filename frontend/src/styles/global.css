@@ -33,3 +33,28 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.success-text { color: #067647; }
+.badge { display: inline-block; border-radius: 10px; padding: 1px 8px; font-size: 12px; white-space: nowrap; }
+.badge.ok { background: #e7f6ec; color: #067647; border: 1px solid #aee3c3; }
+.badge.fail { background: #fef0ee; color: #b42318; border: 1px solid #f3c2bd; }
+.badge.warn { background: #fef6e6; color: #b25e09; border: 1px solid #f5d59a; }
+.badge.muted { background: #eef2f6; color: var(--muted); border: 1px solid var(--border); }
+.quality-panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+.quality-panel h3 { margin: 0 0 8px; font-size: 15px; }
+.quality-toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0; }
+.profile-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.profile-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.profile-card.fail { border-color: #f3c2bd; background: #fffafa; }
+.profile-card.ok { border-color: #aee3c3; background: #f7fdf9; }
+.profile-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.profile-title { font-weight: 600; font-size: 14px; }
+.profile-meta { color: var(--muted); font-size: 12px; }
+.check-list { margin: 8px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.check-fail { color: #b42318; }
+.check-pass { color: #067647; }
+.history-box { margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 8px; }
+.history-item { font-size: 12px; color: var(--muted); padding: 2px 0; }
+.reason-text { color: #b42318; font-size: 12px; margin: 4px 0 0; }
+.dep-cell { font-size: 12px; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.checkbox-cell { width: 34px; text-align: center; }

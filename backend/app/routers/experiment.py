@@ -58,6 +58,15 @@ def run_action(entry_id: int, payload: EntryPayload) -> ActionResult:
     return ActionResult(ok=True, message=message, entry=entry)
 
 
+@router.post("/{entry_id}/sync-dependency", response_model=ActionResult)
+def sync_dependency(entry_id: int) -> ActionResult:
+    """同步实验实际引用的分析数据集画像版本，阻断状态随当前画像结论重算。"""
+    entry, message = service.sync_dependency(entry_id)
+    if entry is None:
+        return ActionResult(ok=False, message=message)
+    return ActionResult(ok=True, message=message, entry=entry)
+
+
 @router.get("/export")
 def export_entries() -> dict[str, Any]:
     """导出分析实验管理清单：返回当前过滤条件下的全量数据。"""

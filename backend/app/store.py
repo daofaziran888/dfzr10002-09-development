@@ -4,6 +4,7 @@
 """
 from __future__ import annotations
 
+import threading
 from typing import Any
 
 from app.seed import SEED_ROWS
@@ -14,12 +15,30 @@ class Store:
         self._tables: dict[str, list[dict[str, Any]]] = {
             name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
         }
+        # 画像批量提交存在并发覆盖场景，所有写入统一走这把锁串行化。
+        self.lock = threading.RLock()
 
     def module_names(self) -> list[str]:
-        return sorted(self._tables)
+        return sorted(name for name in self._tables if not name.startswith("_"))
 
     def rows(self, module: str) -> list[dict[str, Any]]:
         return self._tables.setdefault(module, [])
+
+    def insert(self, module: str, row: dict[str, Any]) -> dict[str, Any]:
+        rows = self.rows(module)
+        row = dict(row)
+        row["id"] = max((int(item.get("id", 0)) for item in rows), default=0) + 1
+        rows.append(row)
+        return row
+
+    def reset(self) -> None:
+        """按种子数据重建全部表，主要供测试在干净状态下重复执行。"""
+        from app.seed import SEED_ROWS
+
+        with self.lock:
+            self._tables = {
+                name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
+            }
 
     def find(self, module: str, entry_id: int) -> dict[str, Any] | None:
         for row in self.rows(module):
